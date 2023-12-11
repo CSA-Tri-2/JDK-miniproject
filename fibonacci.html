@@ -146,15 +146,14 @@ function getData() {
 const base_url = "http://localhost:8799/api/fibonacci/";
 
 function read_pull() {
-    // Replace '10' with the dynamic value that the user provides
     const userFiboInput = document.getElementById("numberInput").value;
     console.log(userFiboInput);
 
     // set options for cross-origin header request
     const authOptions = {
         method: 'GET', // GET request
-        mode: 'cors', // no-cors, *cors, same-origin
-        cache: 'default', // *default, no-cache, reload, force-cache, only-if-cached
+        mode: 'cors', // no-cors, cors, same-origin
+        cache: 'default', // default, no-cache, reload, force-cache, only-if-cached
         // credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
