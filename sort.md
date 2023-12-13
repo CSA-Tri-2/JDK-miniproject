@@ -6,7 +6,7 @@ description:
 courses: { compsci: {week: 1} }
 type: hacks
 ---
-
+<!-- yoo -->
 <head>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -58,5 +58,6 @@ try {
             }
         });
     </script>
+    
 </body>
 
