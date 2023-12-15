@@ -27,21 +27,16 @@ type: hacks
         </tbody>
     </table>
     <script>
-const axios = require('axios');
-const options = {
-  method: 'GET',
-  url: 'https://dog-breeds2.p.rapidapi.com/dog_breeds',
-  headers: {
-    'X-RapidAPI-Key': '1748ee8916mshe4a05c6edb7af0ap1399f4jsn23f82b0ddfa3',
-    'X-RapidAPI-Host': 'dog-breeds2.p.rapidapi.com'
-  }
-};
-try {
-	const response = await axios.request(options);
-	console.log(response.data);
-} catch (error) {
-	console.error(error);
-}
+        const settings = {
+            async: true,
+            crossDomain: true,
+            url: 'https://covid-193.p.rapidapi.com/statistics',
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': '1748ee8916mshe4a05c6edb7af0ap1399f4jsn23f82b0ddfa3',
+                'X-RapidAPI-Host': 'covid-193.p.rapidapi.com'
+            }
+        };
         $.ajax(settings).done(function (response) {
             console.log(response);
             if (response && response.response) {
@@ -49,9 +44,9 @@ try {
                 const table = $('#covidTable').DataTable({
                     data: data,
                     columns: [
-                        { data: 'breed' },
-                        { data: 'origin' },
-                        { data: 'height' },
+                        { data: 'country' },
+                        { data: 'continent' },
+                        { data: 'cases.new' },
                         { data: 'cases.total' },
                     ]
                 });
@@ -59,4 +54,3 @@ try {
         });
     </script>
 </body>
-
