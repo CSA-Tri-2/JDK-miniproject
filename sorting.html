@@ -1,0 +1,159 @@
+<script src="https://code.jscharting.com/latest/jscharting.js"></script>
+
+<div style="height: 650px;">
+    <div id="chartDiv" style="max-width: 640px; height: 650px; margin: 0 auto;">
+    </div>
+    <div class="container">
+        <button onclick="read_pull()">Update Data Table</button>
+        <title>Sorting - Live Updating Table</title>
+        <style>
+            table {
+                border-collapse: collapse;
+                margin: 20px;
+            }
+
+            table, th, td {
+                border: 1px solid black;
+            }
+
+            th, td {
+                padding: 10px;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f2f2f2;
+            }
+        </style>
+    </div>
+    <table id="sortTable">
+        <thead>
+        <tr>
+            <th>Sort Type</th>
+            <th>Iterations</th>
+            <th>Comparisons</th>
+            <th>Merges or Swaps</th>
+            <th>Execution Time</th>
+            <th>Unsorted Array</th>
+            <th>Sorted Array</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Data will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    var chart = JSC.chart('chartDiv', {
+        debug: true,
+        type: 'horizontal column solid',
+        title_label: {
+            text: 'Time took to Run each Sorting Method',
+            style_fontWeight: 'bold',
+            position: 'top middle',
+            style_fontSize: 16
+        },
+        legend_visible: true,
+        legend_template: "%icon %name",
+        yAxis: {
+            scale_range: { padding: 0.1, min: 0 },
+            orientation: 'opposite',
+            label_text: "Method",
+            label_style_fontWeight: 'bold'
+        },
+        xAxis: {
+            defaultTick_label_width: 100,
+            label_text: "Time",
+            label_style_fontWeight: 'bold',
+            crosshair: {
+                enabled: true,
+                gridLine_visible: false,
+                outline_width: 0,
+                label_style_fontWeight: 'bold'
+            }
+        },
+        defaultSeries_palette: 'default',
+        defaultPoint: {
+            outline_width: 0,
+            tooltip: '<b>%yValue</b>',
+        },
+        defaultTooltip_label_text: '%points',
+        series: makeSeries(getData())
+    });
+
+    var chartData = getData();
+
+    function makeSeries(data) {
+        return [
+            {
+                points: data.map(function (item) {
+                    return {
+                        name: item.sortType,
+                        y: item.executionTime,
+                        method: item.sortType
+                    };
+                })
+            }
+        ];
+    }
+
+    function updateChart(newData) {
+        // Update existing data with new data
+        chartData = newData;
+
+        // Update chart series with the new data
+        chart.options({ series: makeSeries(chartData) });
+
+        // Redraw the chart
+        chart.update('modify', 'refresh');
+    }
+
+    function getData() {
+        return [
+
+        ];
+    }
+</script>
+
+<script>
+    const base_url = "http://localhost:8799/api/sorting/";
+
+    function read_pull() {
+        // Fetch data for all sorting types
+        fetchAndUpdateTable("merge");
+        fetchAndUpdateTable("insertion");
+        fetchAndUpdateTable("selection");
+        fetchAndUpdateTable("bubble");
+    }
+
+    function fetchAndUpdateTable(sortType) {
+        fetch(base_url + sortType, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => updateTableRow(data));
+    }
+
+    function updateTableRow(data) {
+        const table = document.getElementById("sortTable");
+
+        // Add new row with sorting data
+        const newRow = table.insertRow(-1);
+        const keys = Object.keys(data);
+        keys.forEach((key, index) => {
+            const cell = newRow.insertCell(index);
+            if (key === "unsortedArray" || key === "sortedArray") {
+                cell.textContent = JSON.stringify(data[key]);
+            } else {
+                cell.textContent = data[key];
+            }
+        });
+
+        updateChart([
+            ...chartData,
+            {
+                sortType: data.sortType,
+                executionTime: data.executionTime,
+            }
+        ]);
+    }
+</script>
